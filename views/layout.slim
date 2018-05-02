@@ -1,0 +1,18 @@
+html
+	head
+		title Music Tips
+		link rel="stylesheet" href="/css/style.css"
+		link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans"
+	
+	body
+		.header
+			a.title href="/" Music Tips
+			div
+				- if session[:user_id] == nil
+					a href="/login" Login
+					a href="/register" Register
+				- else
+					a href="/account" Account
+					a href="/logout" Logout
+		.content
+			== yield

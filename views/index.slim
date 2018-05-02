@@ -1,0 +1,22 @@
+- if session[:user_id] != nil
+	form method="post" action="/post_tip"
+		h2 Post Tip
+		input type="text" name="title" placeholder="Title"
+		input type="text" name="message" placeholder="Message"
+		input type="submit" value="Publish Tip"
+
+- if tips.size == 0
+	h3 No tips!
+- tips.each do |tip|
+	.tip
+		h1 = tip["title"]
+		p = tip["message"]
+		- if session[:user_id] != nil
+			a.like href="/liketips/#{tip['id']}"
+				| Like (
+				= tips_likes[tip["id"].to_s]
+				|  Likes)
+		- else
+			a
+				= tips_likes[tip["id"].to_s]
+				|  Likes

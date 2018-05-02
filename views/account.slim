@@ -1,0 +1,15 @@
+h1
+	= user["real_name"]
+	|  (
+	= user["username"]
+	| )
+
+h2 Liked Tips
+- if liked_tips.size == 0
+	h3 No liked tips
+- liked_tips.each do |tip|
+	.tip
+		h3 = tip["title"]
+		p = tip["message"]
+		a href="/liketipsaccount/#{tip['id']}"
+				| Unlike

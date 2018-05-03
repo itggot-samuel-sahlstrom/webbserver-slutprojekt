@@ -15,7 +15,7 @@ get("/") do
         tips_likes[tip["id"].to_s] = 0
     end
     likes.each do |like|
-        tips_likes[like["tip_id"]] += 1
+        tips_likes[like["tip_id"].to_s] += 1
     end
     
     temp = tips
@@ -83,8 +83,9 @@ post("/register/?") do
     hash = BCrypt::Password.create(password)
     db.execute("INSERT INTO users(username, real_name, password) VALUES(?,?,?)", [username, real_name, hash])
 
-    user_id = db.execute("SELECT id FROM users WHERE username = ?", [username]).first 
-    session[:user_id] = user_id
+    user_id = db.execute("SELECT id FROM users WHERE username = ?", [username]).first["id"]
+    puts "UserID: #{user_id}"
+    session[:user_id] = user_id.to_s
 
     redirect("/")
 end
@@ -110,7 +111,7 @@ post("/login/?") do
         redirect("/login")
     end
 
-    session[:user_id] = user["id"]
+    session[:user_id] = user["id"].to_s
     redirect("/")
 end
 
@@ -120,11 +121,13 @@ get("/logout/?") do
 end
 
 get("/liketips/:id") do
-    tip_id = params[:id]
-    user_id = session[:user_id]
+    tip_id = params[:id].to_s
+    user_id = session[:user_id].to_s
     if user_id == nil
         redirect("/")
     end
+
+    puts "UserID: #{user_id}"
 
     db = SQLite3::Database.new("db/db.sqlite3")
     db.results_as_hash = true
@@ -143,7 +146,7 @@ end
 
 get("/liketipsaccount/:id") do
     tip_id = params[:id]
-    user_id = session[:user_id]
+    user_id = session[:user_id].to_s
     if user_id == nil
         redirect("/")
     end
